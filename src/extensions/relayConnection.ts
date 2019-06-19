@@ -34,18 +34,18 @@ export const RelayConnection = dynamicOutputMethod({
         `Collection field ${fieldName}.${type} cannot be used as a list.`
       );
     }
-    if (!relayConnectionMap.has(config.type)) {
+    if (!relayConnectionMap.has(type)) {
       relayConnectionMap.set(
-        config.type,
+        type,
         objectType({
-          name: `${config.type}RelayConnection`,
+          name: `${type}RelayConnection`,
           definition(c) {
             c.list.field("edges", {
               type: objectType({
-                name: `${config.type}Edge`,
+                name: `${type}Edge`,
                 definition(e) {
                   e.id("cursor");
-                  e.field("node", { type: config.type });
+                  e.field("node", { type });
                 },
               }),
             });
@@ -55,7 +55,7 @@ export const RelayConnection = dynamicOutputMethod({
       );
     }
     t.field(fieldName, {
-      type: relayConnectionMap.get(config.type)!,
+      type: relayConnectionMap.get(type)!,
       args: {
         first: intArg(),
         after: stringArg(),
