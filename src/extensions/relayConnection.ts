@@ -66,6 +66,9 @@ export const RelayConnection = dynamicOutputMethod({
       nullable: config.nullable,
       description: config.description,
       resolve(root, args, ctx, info) {
+        if (config.resolve) {
+          return config.resolve(root, args, ctx, info);
+        }
         const edgeResolver: GraphQLFieldResolver<any, any> = (...fArgs) =>
           config.edges(root, args, ctx, fArgs[3]);
         const pageInfoResolver: GraphQLFieldResolver<any, any> = (...fArgs) =>
